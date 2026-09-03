@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_ticketrush
+    environment:
+      - POSTGRES_PASSWORD=devpassword
+      - POSTGRES_DB=ticketrush_dev
+    ports:
+      - 5432:5432
+    volumes:
+      - ticketrush_pgdata:/var/lib/postgresql/data
+
+volumes:
+  ticketrush_pgdata:
