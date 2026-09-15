@@ -1,18 +1,15 @@
 import { Request, Response } from "express";
 import { fetchAllShowtimes } from "./service.js";
+import { showtimesQuerySchema } from "../shared/schemas.js";
+import { ValidationError } from "../shared/errors.js";
 
 export async function getShowtimes(req: Request, res: Response) {
-    try {
-        const showtimes = await fetchAllShowtimes()
-        res.status(200).json(showtimes)
-    } catch (error) {
-         console.error(error);
-        res.status(500).json({
-            error: {
-                code: 'INTERNAL ERROR',
-                message: 'Failed to fetch showtimes',
-                status: 500
-            }
-        })
+    const parsed = showtimesQuerySchema.safeParse(req.query)
+    
+    if (!parsed.success){
+        throw new ValidationError('Invalid movie_id')
     }
+
+        const showtimes = await fetchAllShowtimes(parsed.data.movie_id)
+        res.status(200).json(showtimes)
 }

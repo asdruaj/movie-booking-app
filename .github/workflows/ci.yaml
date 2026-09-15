@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: devpassword
+          POSTGRES_DB: ticketrush_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          cache-dependency-path: server/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: server
+        run: pnpm install
+      
+      - name: Run migrations
+        working-directory: server
+        run: pnpm migrate up
+        env:
+          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
+
+      - name: Seed database
+        working-directory: server
+        run: pnpm seed
+        env:
+          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
+
+      - name: Start server
+        working-directory: server
+        run: pnpm dev &
+        env: 
+          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
+          REDIS_URL: redis://localhost:6379
+          PORT: 5001
+          CLIENT_URL: http://localhost:5173
+      
+      - name: Wait for server to be ready
+        run: |
+          for i in {1..10}; do
+            if curl -sf http://localhost:5001/api/v1/health; then
+              echo "Server is ready"
+              exit 0
+            fi
+            echo "Waiting for server"
+            sleep 2
+          done
+          echo "Server never became ready"
+          exit 1
+
+      - name: Test booking concurrency
+        working-directory: server
+        run: pnpm test-concurrent-booking

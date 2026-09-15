@@ -13,4 +13,9 @@ export const createBookingSchema = z.object({
   showtime_id: z.uuid(),
   seat_id: z.uuid(),
   user_id: z.uuid(),
+  idempotency_key:z.uuid()
+});
+
+export const showtimesQuerySchema = z.object({
+  movie_id: z.uuid().optional(),
 });

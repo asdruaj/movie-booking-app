@@ -10,5 +10,15 @@ services:
     volumes:
       - ticketrush_pgdata:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis_ticketrush
+    ports:
+      - 6379:6379
+    volumes:
+      - ticketrush_redisdata:/data
+
 volumes:
   ticketrush_pgdata:
+  ticketrush_pgdata_shard1:
+  ticketrush_redisdata:
