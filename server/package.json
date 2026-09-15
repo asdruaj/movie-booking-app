@@ -8,7 +8,10 @@
     "migrate": "dotenv -e .env -- node-pg-migrate",
     "dev": "tsx watch index.ts",
     "seed": "tsx scripts/seed.ts",
-    "test-concurrent": "tsx scripts/test-concurrent-booking.ts"
+    "test-concurrent-booking": "tsx scripts/test-concurrent-booking.ts",
+    "test-concurrent-showtimes": "tsx scripts/test-concurrent-showtimes.ts",
+    "test-load-balancing": "tsx scripts/test-load-balancing.ts",
+    "test-sharding": "tsx scripts/test-sharding.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,10 +28,10 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
+    "@types/node": "^22.20.2",
     "@types/pg": "^8.23.1",
     "dotenv-cli": "^11.0.0",
     "node-pg-migrate": "^9.0.0",
-    "pg": "^8.23.0",
     "tsx": "^4.23.13"
   },
   "dependencies": {
@@ -37,6 +40,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
+    "pg": "^8.23.0",
     "redis": "^6.2.1",
     "zod": "^4.5.4"
   }

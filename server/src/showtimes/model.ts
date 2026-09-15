@@ -1,6 +1,6 @@
 import pool from "../shared/db.js";
 
-export async function getAllShowtimes() {
+export async function getAllShowtimes(movieId?: string) {
     const result = await pool.query(`
         SELECT
             showtimes.id,
@@ -12,7 +12,8 @@ export async function getAllShowtimes() {
         FROM showtimes
         INNER JOIN movies ON showtimes.movie_id = movies.id
         INNER JOIN rooms ON showtimes.room_id = rooms.id
-        `)
+        WHERE ($1::uuid IS NULL OR showtimes.movie_id = $1)
+        `,[movieId || null])
 
     return result.rows
 }

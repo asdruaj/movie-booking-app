@@ -6,7 +6,7 @@ const emails = [
   'carol@example.com',
 ];
 
-export async function SeedUsers() {
+export async function seedUsers() {
     const insertedUsers = []
   for (const email of emails) {
 
