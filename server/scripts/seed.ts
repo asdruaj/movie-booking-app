@@ -24,7 +24,7 @@ async function seed() {
   // this could silently pair a showtime with a seat from a different room.
 
     showtimeId: showtimes[0].id,
-    seatId: seats[0].id
+    seatId: [seats[0].id, seats[1].id, seats[2].id]
   }
 
   writeFileSync('scripts/seed-output.json', JSON.stringify(seedOutput))

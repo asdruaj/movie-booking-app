@@ -11,7 +11,7 @@ export const seatsQuerySchema = z.object({
 
 export const createBookingSchema = z.object({
   showtime_id: z.uuid(),
-  seat_id: z.uuid(),
+  seat_ids: z.array(z.uuid()).min(1),
   user_id: z.uuid(),
   idempotency_key:z.uuid()
 });
