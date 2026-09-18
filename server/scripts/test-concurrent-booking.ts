@@ -1,13 +1,14 @@
 import { readFileSync} from 'fs'
+import 'dotenv/config'
 
 async function testConcurrentBooking() {
   const seedData = JSON.parse(readFileSync('scripts/seed-output.json', 'utf-8'))
 
   const requests = Array.from({ length: 5 }, () =>
-    fetch('http://localhost:5001/api/v1/bookings', {
+    fetch(`${process.env.API_URL}/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ showtime_id: seedData.showtimeId, seat_id: seedData.seatId, user_id: seedData.userId, idempotency_key: crypto.randomUUID() }),
+      body: JSON.stringify({ showtime_id: seedData.showtimeId, seat_ids: [seedData.seatId], user_id: seedData.userId, idempotency_key: crypto.randomUUID() }),
     })
   );
 
