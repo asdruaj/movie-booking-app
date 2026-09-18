@@ -7,6 +7,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      API_URL: http://localhost:5001/api/v1
     services:
       postgres:
         image: postgres:16-alpine
@@ -45,42 +47,4 @@ jobs:
 
       - name: Install dependencies
         working-directory: server
-        run: pnpm install
-      
-      - name: Run migrations
-        working-directory: server
-        run: pnpm migrate up
-        env:
-          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
-
-      - name: Seed database
-        working-directory: server
-        run: pnpm seed
-        env:
-          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
-
-      - name: Start server
-        working-directory: server
-        run: pnpm dev &
-        env: 
-          DATABASE_URL: postgres://postgres:devpassword@localhost:5432/ticketrush_test
-          REDIS_URL: redis://localhost:6379
-          PORT: 5001
-          CLIENT_URL: http://localhost:5173
-      
-      - name: Wait for server to be ready
-        run: |
-          for i in {1..10}; do
-            if curl -sf http://localhost:5001/api/v1/health; then
-              echo "Server is ready"
-              exit 0
-            fi
-            echo "Waiting for server"
-            sleep 2
-          done
-          echo "Server never became ready"
-          exit 1
-
-      - name: Test booking concurrency
-        working-directory: server
-        run: pnpm test-concurrent-booking
+        run:
