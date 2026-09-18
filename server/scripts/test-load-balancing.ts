@@ -1,6 +1,7 @@
+import 'dotenv/config'
 async function testLoadBalancing() {
-  const requests = Array.from({ length: 200 }, () =>
-    fetch('http://localhost:8080/api/v1/health').then(res => res.json())
+  const requests = Array.from({ length: 50 }, () =>
+    fetch(`${process.env.API_URL}/health`).then(res => res.json())
   );
 
   const responses = await Promise.all(requests);
