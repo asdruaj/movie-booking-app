@@ -18,7 +18,32 @@ services:
     volumes:
       - ticketrush_redisdata:/data
 
+  server:
+    build: ./server
+    container_name: server_ticketrush
+    ports:
+      - "5001:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:devpassword@postgres:5432/ticketrush_dev
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+      CLIENT_URL: http://localhost:5173
+    depends_on:
+      - postgres
+      - redis
+
+  client:
+    container_name: client_ticketrush
+    build:
+      context: ./client
+      args:
+        - VITE_API_URL=http://localhost:5001/api/v1
+    ports:
+      - 5173:80
+    depends_on:
+      - server
+      
+
 volumes:
   ticketrush_pgdata:
-  ticketrush_pgdata_shard1:
   ticketrush_redisdata:
