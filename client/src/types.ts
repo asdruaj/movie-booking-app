@@ -5,6 +5,7 @@ export type Movie = {
   genre: string;
   duration: number;
   poster_url: string | null;
+  has_showtimes: boolean;
 };
 
 export type Showtime = {
@@ -33,7 +34,12 @@ export type Booking = {
 
 export type CreateBookingInput = {
   showtime_id: string;
-  seat_id: string;
+  seat_ids: string[];
   user_id: string;
   idempotency_key: string
 };
+
+export interface User {
+  id: string;
+  email: string;
+}
