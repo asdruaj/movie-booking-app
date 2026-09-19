@@ -1,12 +1,11 @@
-import type { Booking, CreateBookingInput, Movie, Seat, Showtime } from "./types"
+import type { Booking, CreateBookingInput, Movie, Seat, Showtime, User } from "./types"
 
 const API_URL = import.meta.env.VITE_API_URL
+export async function getMovies(limit: number, offset: number): Promise<Movie[]> {
+  const res = await fetch(`${API_URL}/movies?limit=${limit}&offset=${offset}`)
+  if (!res.ok) throw new Error('Failed to fetch movies')
 
-export async function getMovies(): Promise<Movie[]> {
-    const res = await fetch(`${API_URL}/movies`)
-    if (!res.ok) throw new Error('Failed to fetch movies')
-
-    return res.json()
+  return res.json()
 }
 
 export async function getShowtimes(movieId:string) : Promise<Showtime[]> {
@@ -39,4 +38,9 @@ export async function createBooking(payload: CreateBookingInput) : Promise<Booki
     }
 
     return res.json()
+}
+
+export async function getUsers(): Promise<User[]> {
+  const res = await fetch(`${API_URL}/users`);
+  return res.json();
 }
