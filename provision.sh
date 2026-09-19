@@ -21,7 +21,7 @@ echo "Building migration tooling image..."
 docker build --target builder -t ticketrush-migrator ./server
 
 echo "Starting the app stack..."
-PUBLIC_IP=$(curl -s ifconfig.me)
+PUBLIC_IP=$(curl -s -4 ifconfig.me)
 echo "Detected public IP: $PUBLIC_IP"
 VITE_API_URL=http://$PUBLIC_IP:8081/api/v1 CLIENT_URL=http://$PUBLIC_IP docker compose -p ticketrush-prod -f docker-compose.prod.yml up -d --build
 
