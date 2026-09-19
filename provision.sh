@@ -25,6 +25,16 @@ PUBLIC_IP=$(curl -s -4 ifconfig.me)
 echo "Detected public IP: $PUBLIC_IP"
 VITE_API_URL=http://$PUBLIC_IP:8081/api/v1 CLIENT_URL=http://$PUBLIC_IP docker compose -p ticketrush-prod -f docker-compose.prod.yml up -d --build
 
+echo "Waiting for Postgres to be ready..."
+for i in {1..15}; do
+  if docker exec prod_postgres_ticketrush pg_isready -U postgres > /dev/null 2>&1; then
+    echo "Postgres is ready"
+    break
+  fi
+  echo "Waiting for Postgres..."
+  sleep 2
+done
+
 echo "Running migrations..."
 cd server
 docker run --rm --network ticketrush-prod_default \
