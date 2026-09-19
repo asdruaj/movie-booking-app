@@ -5,9 +5,14 @@ echo "Adding deploy SSH key..."
 mkdir -p ~/.ssh
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgBMtWfI9sCtHCPuR7OGoICOlhY8CDVj98RMOkw+LTB github-actions-deploy" >> ~/.ssh/authorized_keys
 
+echo "Ensuring Docker is running..."
+systemctl start docker
+systemctl enable docker
+
 echo "Cloning repo..."
 mkdir -p /opt
 cd /opt
+rm -rf ticketrush
 git clone https://github.com/asdruaj/movie-booking-app.git ticketrush
 cd ticketrush
 git checkout main
