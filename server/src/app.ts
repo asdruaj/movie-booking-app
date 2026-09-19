@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
-import roomsRouter from './src/rooms/routes.js'
-import moviesRouter from './src/movies/routes.js'
-import showtimesRouter from './src/showtimes/routes.js'
-import seatsRouter from './src/seats/routes.js'
-import bookingRouter from './src/bookings/routes.js'
-import pool from './src/shared/db.js'
-import redisClient from './src/shared/redis.js'
-import {errorHandler} from './src/shared/errorHandler.js'
+import roomsRouter from './rooms/routes.js'
+import moviesRouter from './movies/routes.js'
+import showtimesRouter from './showtimes/routes.js'
+import seatsRouter from './seats/routes.js'
+import bookingRouter from './bookings/routes.js'
+import pool from './shared/db.js'
+import redisClient from './shared/redis.js'
+import {errorHandler} from './shared/errorHandler.js'
 
 export const app = express()
 function timeOutAfter(ms: number){
@@ -42,7 +42,7 @@ app.use('/api/v1/health', async (req: Request, res: Response)=>{
 
     res.status(isSystemReady ? 200 : 503).json({
         healthy: isSystemReady,
-        instance: process.env.PORT,
+        instance: process.env.INSTANCE_ID,
         redis: isRedisHealthy ? 'ok' : 'down',
         postgres: isPgHealty ? 'ok' : 'down',
         error: {

@@ -39,7 +39,7 @@ if (isLoading) return <p>Loading...</p>
                 <button onClick={()=> {bookingMutation.mutate({
                     showtime_id: showtimeId!,
                     seat_id: seat.id,
-                    user_id: '89f521e6-94ad-4570-a156-7709fbb4c3a3',
+                    user_id: '9330f3c5-9916-4191-987e-21ef3ce20f00',
                     idempotency_key: crypto.randomUUID()
                 })}}>
                 Book seat</button>}

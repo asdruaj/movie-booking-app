@@ -1,7 +1,9 @@
+import 'dotenv/config'
+
 async function testConcurrentShowtimes() {
 
   const requests = Array.from({ length: 5 }, () =>
-    fetch('http://localhost:5001/api/v1/showtimes', {
+    fetch(`${process.env.API_URL}/showtimes`, {
       method: 'GET',
     })
   );

@@ -1,9 +1,9 @@
 import { getAllSeats } from "../seats/model.js";
 import redisClient from "../shared/redis.js";
-import { createBookingWithLock } from "./model.js";
+import { createMultipleBookingsWithLock } from "./model.js";
 
-export async function bookSeat(showtime_id: string, seat_id: string, user_id: string, idempotency_key: string) {
-  const booking = await createBookingWithLock(showtime_id, seat_id, user_id, idempotency_key)
+export async function bookSeat(showtime_id: string, seatsId: string[], user_id: string, idempotency_key: string) {
+  const booking = await createMultipleBookingsWithLock(showtime_id, seatsId, user_id, idempotency_key)
 
   const freshSeats = await getAllSeats(showtime_id)
 
