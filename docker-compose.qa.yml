@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: qa_postgres_ticketrush
+    environment:
+      - POSTGRES_PASSWORD=devpassword
+      - POSTGRES_DB=ticketrush_dev
+    ports:
+      - 5433:5432
+    volumes:
+      - qa_ticketrush_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: qa_redis_ticketrush
+    ports:
+      - 6380:6379
+    volumes:
+      - qa_ticketrush_redisdata:/data
+
+  server:
+    build: ./server
+    container_name: qa_server_ticketrush
+    ports:
+      - "5002:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:devpassword@postgres:5432/ticketrush_dev
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+      CLIENT_URL: http://localhost:5174
+    depends_on:
+      - postgres
+      - redis
+
+  client:
+    container_name: qa_client_ticketrush
+    build:
+      context: ./client
+      args:
+        - VITE_API_URL=http://localhost:5002/api/v1
+    ports:
+      - 5174:80
+    depends_on:
+      - server
+      
+
+volumes:
+  qa_ticketrush_pgdata:
+  qa_ticketrush_redisdata:
