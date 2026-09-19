@@ -17,4 +17,4 @@ jobs:
           script: |
             cd /opt/ticketrush
             git pull origin main
-            VITE_API_URL=http://153.75.81.18:8081/api/v1 CLIENT_URL=http://153.75.81.18 docker compose -p ticketrush-prod -f docker-compose.prod.yml up -d --build
+            VITE_API_URL=http://${{ secrets.DEPLOY_HOST }}:8081/api/v1 CLIENT_URL=http://${{ secrets.DEPLOY_HOST }} docker compose -p ticketrush-prod -f docker-compose.prod.yml up -d --build
