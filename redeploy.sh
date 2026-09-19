@@ -8,6 +8,9 @@ if [ -z "$NEW_IP" ]; then
   exit 1
 fi
 
+echo "Clearing any stale SSH host key for $NEW_IP..."
+ssh-keygen -R $NEW_IP 2>/dev/null || true
+
 echo "Provisioning $NEW_IP..."
 ssh -o StrictHostKeyChecking=no root@$NEW_IP 'bash -s' < provision.sh
 
