@@ -8,6 +8,7 @@ import bookingRouter from './bookings/routes.js'
 import pool from './shared/db.js'
 import redisClient from './shared/redis.js'
 import {errorHandler} from './shared/errorHandler.js'
+import usersRouter from './users/routes.js';
 
 export const app = express()
 function timeOutAfter(ms: number){
@@ -28,6 +29,7 @@ app.use('/api/v1/movies', moviesRouter);
 app.use('/api/v1/showtimes', showtimesRouter);
 app.use('/api/v1/seats', seatsRouter);
 app.use('/api/v1/bookings', bookingRouter);
+app.use('/api/v1/users', usersRouter);
 
 app.use('/api/v1/health', async (req: Request, res: Response)=>{
 

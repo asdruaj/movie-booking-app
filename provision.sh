@@ -9,6 +9,16 @@ echo "Ensuring Docker is running..."
 systemctl start docker
 systemctl enable docker
 
+echo "Waiting for Docker daemon to be ready..."
+for i in {1..15}; do
+  if docker info > /dev/null 2>&1; then
+    echo "Docker is ready"
+    break
+  fi
+  echo "Waiting for Docker daemon..."
+  sleep 2
+done
+
 echo "Cloning repo..."
 mkdir -p /opt
 cd /opt
